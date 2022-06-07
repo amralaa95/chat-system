@@ -1,0 +1,158 @@
+version: '3.2'
+
+volumes:
+  mysql:
+  redis:
+  data01:
+  kafka:
+
+services:
+  chat_system:
+    build: .
+    command: sh -c "/wait && yarn migrate && yarn start"
+    ports:
+      - "8000:3000"
+    links:
+      - db
+      - redis
+      - elasticsearch
+      - kafka
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+      - kafka
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
+      ELASTIC_SEARCH_URL: http://elasticsearch:9200
+      REDIS_URL: redis://redis:6379
+      KAFKA_BROKER_LIST: "kafka:9092"
+      WAIT_HOSTS: "kafka:9092"
+      WAIT_HOSTS_TIMEOUT: 300
+      WAIT_SLEEP_INTERVAL: 30
+      WAIT_HOST_CONNECT_TIMEOUT: 30
+    restart: always
+
+  application_worker:
+    build: .
+    command: sh -c "/wait && npm run application_worker"
+    links:
+      - db
+      - redis
+      - kafka
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
+      ELASTIC_SEARCH_URL: http://elasticsearch:9200
+      REDIS_URL: redis://redis:6379
+      KAFKA_BROKER_LIST: "kafka:9092"
+      WAIT_HOSTS: "kafka:9092"
+      WAIT_HOSTS_TIMEOUT: 300
+      WAIT_SLEEP_INTERVAL: 30
+      
+    restart: always
+
+  chat_worker:
+    build: .
+    command: sh -c "/wait && npm run chat_worker"
+    links:
+      - db
+      - redis
+      - kafka
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
+      ELASTIC_SEARCH_URL: http://elasticsearch:9200
+      REDIS_URL: redis://redis:6379
+      KAFKA_BROKER_LIST: "kafka:9092"
+      WAIT_HOSTS: "kafka:9092"
+      WAIT_HOSTS_TIMEOUT: 300
+      WAIT_SLEEP_INTERVAL: 30
+    restart: always
+
+  message_worker:
+    build: .
+    command: sh -c "/wait && npm run message_worker"
+    links:
+      - db
+      - redis
+      - elasticsearch
+      - kafka
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
+      ELASTIC_SEARCH_URL: http://elasticsearch:9200
+      REDIS_URL: redis://redis:6379
+      KAFKA_BROKER_LIST: "kafka:9092"
+      WAIT_HOSTS: "kafka:9092"
+      WAIT_HOSTS_TIMEOUT: 300
+      WAIT_SLEEP_INTERVAL: 30
+    restart: always
+
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+     - ./data:/docker-entrypoint-initdb.d/
+    ports:
+     - "3307:3306"
+    restart: always
+    environment:
+     MYSQL_ROOT_PASSWORD: "rootpassword"
+     MYSQL_DATABASE: "chat_system"
+     MYSQL_USER: "user"
+     MYSQL_PASSWORD: "rootpassword"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
+    environment:
+      - cluster.name=es-docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - '6380:6379'
+    volumes:
+      - ./volumes/redis-data:/data
+    command: redis-server
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.2.3
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2182:2181
+  kafka:
+    image: confluentinc/cp-kafka:4.1.2-2
+    depends_on:
+      - zookeeper
+    environment:
+      environment:
+      # KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - 9093:9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -8,7 +8,7 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
-      number: {
+      chat_number: {
         type: Sequelize.INTEGER,
         allowNull: false
       },

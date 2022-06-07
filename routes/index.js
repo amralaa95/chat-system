@@ -1,11 +1,8 @@
-const AsyncRouter = require('macropress-router')
-
-const router = new AsyncRouter()
+const express = require('express')
+const router = express.Router()
 
 router.use('/', require('./health'))
-router.use('/application', require('./application'))
-router.use('/chat', require('./chat'))
-router.use('/message', require('./message'))
+router.use('/applications', require('./application'))
 router.use('/search', require('./search'))
 
 module.exports = router

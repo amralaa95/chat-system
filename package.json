@@ -1,10 +1,10 @@
 {
-  "name": "payment",
+  "name": "chat_system",
   "version": "0.242.2",
-  "description": "Payment microservice",
+  "description": "Chat System",
   "main": "index.js",
-  "author": "Ali Essam <ali.essam.arafa@gmail.com>",
-  "license": "MIT",
+  "author": "Amr Alaa <amralaa423@gmail.com>",
+  "license": "",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon --inspect index.js",
@@ -16,7 +16,9 @@
     "migrate:test": "dotenv -e test.env npm run migrate",
     "worker:test": "dotenv -e test.env npm run worker",
     "lint": "/bin/sh ./test-only.sh && standard -v",
-    "dotenv:test": "dotenv -e test.env --"
+    "dotenv:test": "dotenv -e test.env --",
+    "create_index": "node lib/elasticsearch/create_index.js",
+    "update_chats_messages_count": "node cronjobs/update_chats_mesages_counts.js "
   },
   "dependencies": {
     "@growthbook/growthbook": "^0.17.0",
@@ -31,7 +33,7 @@
     "faker": "^4.1.0",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.13",
-    "macropress-router": "^1.0.1",
+    "http-status": "^1.5.0",
     "moment": "^2.18.1",
     "mysql": "^2.17.1",
     "mysql2": "^1.6.5",
@@ -53,7 +55,7 @@
     "async": "^3.2.1",
     "wtsqs": "^1.2.0",
     "@elastic/elasticsearch": "7.12.0",
-    "node-rdkafka": "^2.10.0"
+    "node-rdkafka": "^2.7.2"
   },
   "devDependencies": {
     "chai": "^4.1.2",

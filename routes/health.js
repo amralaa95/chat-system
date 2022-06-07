@@ -1,6 +1,5 @@
-const AsyncRouter = require('macropress-router')
-
-const router = new AsyncRouter()
+const express = require('express')
+const router = express.Router()
 
 router.get('/health', async (req, res) => {
   return {

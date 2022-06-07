@@ -8,21 +8,21 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
-      number: {
+      message_number: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      text: {
+      chat_number: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      application_token: {
+        type: Sequelize.UUID,
+        allowNull: false
+      },
+      body: {
         type: Sequelize.STRING,
         allowNull: false
-      },
-      chatId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'chats',
-          key: 'id'
-        }
       },
       createdAt: {
         allowNull: false,
@@ -35,7 +35,7 @@ module.exports = {
       deletedAt: {
         type: Sequelize.DATE
       }
-    })
+    }).then(()=> queryInterface.addIndex('messages', ['application_token', 'chat_number']))
   },
 
   down: (queryInterface, Sequelize) => {

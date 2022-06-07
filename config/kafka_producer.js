@@ -13,7 +13,8 @@ const producerDefaultConfig = {
   'socket.keepalive.enable': true,
   'queue.buffering.max.messages': 1000,
   'queue.buffering.max.kbytes': 102400,
-  'batch.num.messages': 1000
+  'batch.num.messages': 1000,
+  'security.protocol': 'plaintext'
 }
 
 
@@ -33,6 +34,7 @@ class Producer {
 
   _connect () {
     this.producer.connect({ timeout: CLIENT_CONNECTION_TIMEOUT }, (err) => {
+      console.error(err)
       if (err && process.env.NODE_ENV !== 'test') {
         throw err
       }
@@ -44,7 +46,7 @@ class Producer {
       this._connect()
       this.producer.on('ready', () => this.enqueue(topic, key, body))
     }
-
+    console.log(topic, key, body)
     try {
       this.producer.produce(
         topic,
@@ -66,4 +68,5 @@ class Producer {
 
 module.exports = {
   Producer: new Producer()
+  // Producer
 }

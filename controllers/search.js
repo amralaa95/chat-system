@@ -1,20 +1,21 @@
 const _ = require('lodash')
 const Boom = require('boom')
-const { search: searchClient } = require('../lib/elasticsearch/search')
+const { wrapAsyncAction } = require('../lib/express_async')
+const { searchDocuments } = require('../lib/elasticsearch')
 
 const search = async (req, res) => {
   const {
     application_token: applicationToken,
     chat_number: chatNumber,
-    text
+    body
   } = req.query
 
   if (_.isNil(applicationToken)) throw Boom.badRequest('application token is missing')
   if (_.isNil(chatNumber)) throw Boom.badRequest('chat number is missing')
 
-  return searchClient(applicationToken, chatNumber, text)
+  return searchDocuments({application_token: applicationToken, chat_number: chatNumber}, body)
 }
 
 module.exports = {
-  search
+  search: wrapAsyncAction(search)
 }

@@ -10,7 +10,7 @@ const chatHandler = async ({ message }) => {
   try {
     await models.Chat.create({
       applicationToken: body.application_token,
-      number: body.chat_number
+      chat_number: body.chat_number
     })
     message.commit()
     return

@@ -7,7 +7,7 @@ module.exports = function (sequelize, DataTypes) {
       autoIncrement: true,
       primaryKey: true
     },
-    number: {
+    chat_number: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -21,8 +21,5 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     paranoid: true
   })
-  Chat.associate = function (models) {
-    models.Chat.hasMany(models.Message)
-  }
   return Chat
 }

@@ -25,7 +25,7 @@ module.exports = function (sequelize, DataTypes) {
     paranoid: true
   })
   Application.associate = function (models) {
-    models.Application.hasMany(models.Chat)
+    models.Application.hasMany(models.Chat) // foreign key for application on chat model
   }
   return Application
 }
