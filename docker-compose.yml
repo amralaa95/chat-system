@@ -28,8 +28,8 @@ services:
       DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
       ELASTIC_SEARCH_URL: http://elasticsearch:9200
       REDIS_URL: redis://redis:6379
-      KAFKA_BROKER_LIST: "kafka:9092"
-      WAIT_HOSTS: "kafka:9092"
+      KAFKA_BROKER_LIST: "kafka:29092"
+      WAIT_HOSTS: "kafka:29092"
       WAIT_HOSTS_TIMEOUT: 300
       WAIT_SLEEP_INTERVAL: 30
       WAIT_HOST_CONNECT_TIMEOUT: 30
@@ -48,8 +48,8 @@ services:
       DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
       ELASTIC_SEARCH_URL: http://elasticsearch:9200
       REDIS_URL: redis://redis:6379
-      KAFKA_BROKER_LIST: "kafka:9092"
-      WAIT_HOSTS: "kafka:9092"
+      KAFKA_BROKER_LIST: "kafka:29092"
+      WAIT_HOSTS: "kafka:29092"
       WAIT_HOSTS_TIMEOUT: 300
       WAIT_SLEEP_INTERVAL: 30
       
@@ -68,8 +68,8 @@ services:
       DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
       ELASTIC_SEARCH_URL: http://elasticsearch:9200
       REDIS_URL: redis://redis:6379
-      KAFKA_BROKER_LIST: "kafka:9092"
-      WAIT_HOSTS: "kafka:9092"
+      KAFKA_BROKER_LIST: "kafka:29092"
+      WAIT_HOSTS: "kafka:29092"
       WAIT_HOSTS_TIMEOUT: 300
       WAIT_SLEEP_INTERVAL: 30
     restart: always
@@ -88,8 +88,8 @@ services:
       DATABASE_URI: mysql://root:rootpassword@db:3306/chat_system
       ELASTIC_SEARCH_URL: http://elasticsearch:9200
       REDIS_URL: redis://redis:6379
-      KAFKA_BROKER_LIST: "kafka:9092"
-      WAIT_HOSTS: "kafka:9092"
+      KAFKA_BROKER_LIST: "kafka:29092"
+      WAIT_HOSTS: "kafka:29092"
       WAIT_HOSTS_TIMEOUT: 300
       WAIT_SLEEP_INTERVAL: 30
     restart: always
@@ -100,7 +100,7 @@ services:
     volumes:
      - ./data:/docker-entrypoint-initdb.d/
     ports:
-     - "3307:3306"
+     - "3308:3306"
     restart: always
     environment:
      MYSQL_ROOT_PASSWORD: "rootpassword"
@@ -154,5 +154,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
       - 9093:9092
+      - 29092:29092
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

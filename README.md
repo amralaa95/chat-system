@@ -1,4 +1,5 @@
 # How To Run The App
+- Docker compose has a problem with kafka image itself so it's not working correctly with docker so follow this steps
 - First install some dependencies mysql, elasticsearch, redis, kafka, node 14 and yarn and then run 
  ``` bash
 yarn
@@ -49,9 +50,59 @@ yarn update_chats_messages_count
 - Create the application
 ```curl
 curl -X POST \
-  http://localhost:8000/applications/ \
+  http://localhost:3000/applications/ \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
-  -H 'postman-token: bf77b2d7-29ca-6ea2-d818-d76427252e1a' \
   -d '{"name":"test6"}'
+```
+- Get the application
+```curl
+curl -X GET \
+  http://localhost:3000/applications/<application_token> \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json'
+```
+- Create chat for application
+```curl
+curl -X POST \
+  http://localhost:3000/applications/<application_token>/chats \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json'
+```
+- Get chats for application
+```curl
+curl -X GET \
+  http://localhost:3000/applications/<application_token>/chats/ \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json'
+```
+- Create message for chat
+```curl
+curl -X POST \
+  http://localhost:3000/applications/<application_token>/chats/<chat_number>/messages/ \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -d '{"body": "error on all message"}'
+```
+- Update message for chat
+```curl
+curl -X PUT \
+  http://localhost:3000/applications/<application_token>/chats/<chat_number>/messages/<message_number> \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -d '{"body": "error message"}'
+```
+- Get Messages for chat
+```curl
+curl -X GET \
+  http://localhost:3000/applications/<application_token>/chats/<chat_number>/messages \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json'
+```
+- Search for message for chat
+```curl
+curl -X GET \
+  'http://localhost:3000/search?application_token=<application_token>&chat_number=<chat_number>&body=<message_body>' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json'
 ```

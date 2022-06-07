@@ -7,19 +7,28 @@ module.exports = function (sequelize, DataTypes) {
       autoIncrement: true,
       primaryKey: true
     },
-    number: {
+    message_number: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    text: {
-      type: DataTypes.STRING(300),
+    chat_number: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    application_token: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    body: {
+      type: DataTypes.STRING,
       allowNull: false
     }
   }, {
-    paranoid: true
+    paranoid: true,
+    indexes: [{
+      fields: ['application_token', 'chat_number']
+    }],
   })
-  Message.associate = function (models) {
-    // associations can be defined here
-  }
+
   return Message
 }
