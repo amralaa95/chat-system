@@ -1,4 +1,4 @@
-# How To Run The Challenge
+# How To Run The App
 - First install some dependencies mysql, elasticsearch, redis, kafka, node 14 and yarn and then run 
  ``` bash
 yarn
@@ -44,4 +44,14 @@ yarn message_worker
 - For updating `chats_count` & `messages_count` you can run the next command and will update the values from redis
 ``` bash
 yarn update_chats_messages_count
+```
+
+- Create the application
+```curl
+curl -X POST \
+  http://localhost:8000/applications/ \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -H 'postman-token: bf77b2d7-29ca-6ea2-d818-d76427252e1a' \
+  -d '{"name":"test6"}'
 ```
